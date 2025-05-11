@@ -118,7 +118,9 @@ npm run dev
 [📺 Watch Demo (3–4 mins)]
 
 
-https://github.com/user-attachments/assets/ea1e4781-e7ea-49bb-b9e8-756387acc1b0
+https://github.com/user-attachments/assets/e18c48b4-1a25-48ff-a65f-fe77caa32a87
+
+
 
 
 
