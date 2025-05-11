@@ -1,58 +1,66 @@
-import { useState } from "react"
-import axios from "axios"
+import React, { useState } from 'react'
+import axios from 'axios'
+import { FaCode, FaMagic } from 'react-icons/fa'
 
 function App() {
-  const [code, setCode] = useState("")
-  const [language, setLanguage] = useState("Python")
-  const [result, setResult] = useState("")
+  const [code, setCode] = useState('')
+  const [explanation, setExplanation] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleExplain = async () => {
+    if (!code.trim()) return alert('Please enter some code!')
     setLoading(true)
-    setResult("")
+    setExplanation('')
+
     try {
-      const res = await axios.post("http://localhost:5000/api/explain", {
-        code,
-        language,
-      })
-      setResult(res.data.explanation)
+      const res = await axios.post('http://localhost:5000/api/explain', { code })
+      setExplanation(res.data.explanation)
     } catch (err) {
-      setResult("Error: " + err.message)
+      setExplanation('Error: Could not fetch explanation.')
+      console.error(err)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold mb-4">AI Code Explainer</h1>
-      <select
-        value={language}
-        onChange={(e) => setLanguage(e.target.value)}
-        className="mb-4 p-2 border"
-      >
-        <option>Python</option>
-        <option>JavaScript</option>
-        <option>C++</option>
-        <option>Java</option>
-      </select>
-      <textarea
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        className="w-full h-64 p-4 border rounded"
-        placeholder="Paste your code here..."
-      />
-      <button
-        onClick={handleExplain}
-        className="mt-4 px-6 py-2 bg-blue-600 text-white rounded"
-      >
-        {loading ? "Explaining..." : "Explain Code"}
-      </button>
-      {result && (
-        <div className="mt-6 bg-white p-4 rounded shadow whitespace-pre-wrap">
-          {result}
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-gray-100 font-sans">
+      {/* Header */}
+      <header className="bg-black/20 backdrop-blur-md p-4 shadow-md flex items-center gap-3 justify-center">
+        <FaCode size={26} className="text-blue-400" />
+        <h1 className="text-3xl font-bold tracking-wide">AI Code Explainer</h1>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-5xl mx-auto mt-10 px-6">
+        <label className="block mb-3 text-xl font-medium text-gray-300">Enter your code:</label>
+        <textarea
+          className="w-full h-56 p-4 text-sm bg-white/5 text-white border border-gray-600 rounded-lg backdrop-blur-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+          placeholder="// Write or paste your code here..."
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        ></textarea>
+
+        <button
+          className="mt-5 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-300 shadow-md"
+          onClick={handleExplain}
+        >
+          <FaMagic />
+          {loading ? 'Explaining...' : 'Explain Code'}
+        </button>
+
+        {/* Explanation Output */}
+        {explanation && (
+          <div className="mt-8 bg-white/5 text-white p-5 rounded-lg border border-gray-600 shadow-md max-h-72 overflow-y-auto whitespace-pre-wrap backdrop-blur-lg">
+            {explanation}
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="mt-16 p-4 text-center text-sm text-gray-400">
+        Built with 💡 using Gemini AI · Designed for Developers
+      </footer>
     </div>
   )
 }
