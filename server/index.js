@@ -13,13 +13,13 @@ app.use(bodyParser.json())
 
 app.post('/api/explain', async (req, res) => {
   try {
-    const { code } = req.body
+    const { code, language } = req.body
 
     if (!code) return res.status(400).json({ error: 'Code is required' })
 
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' })
 
-    const prompt = `Explain the following code in simple terms:\n\n${code}`
+    const prompt = `Explain the following ${language} code in simple terms. Break it down step-by-step:\n\n${code}`
 
     const result = await model.generateContent(prompt)
     const response = await result.response
@@ -27,7 +27,7 @@ app.post('/api/explain', async (req, res) => {
 
     res.json({ explanation })
   } catch (error) {
-    console.error('Error in /explain:', error)
+    console.error('Error in /api/explain:', error)
     res.status(500).json({ error: 'Internal server error' })
   }
 })
