@@ -17,7 +17,7 @@ function App() {
     setExplanation('')
 
     try {
-      const res = await axios.post('http://localhost:5000/api/explain', {
+      const res = await axios.post('https://aicode-explainer.onrender.com/api/explain', {
         code,
         language,
       })
