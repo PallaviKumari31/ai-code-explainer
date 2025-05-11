@@ -11,13 +11,13 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 app.use(bodyParser.json())
 
-app.post('/explain', async (req, res) => {
+app.post('/api/explain', async (req, res) => {
   try {
     const { code } = req.body
 
     if (!code) return res.status(400).json({ error: 'Code is required' })
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' })
 
     const prompt = `Explain the following code in simple terms:\n\n${code}`
 
